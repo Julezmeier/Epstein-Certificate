@@ -2,23 +2,23 @@ import sharp from 'sharp';
 import crypto from 'crypto';
 
 /**
- * Generiert ein Unbedenklichkeitszertifikat als PNG-Bild
- * Verwendet SVG → PNG Konvertierung mit sharp
- * @param {string} name - Name der Person
- * @param {number} documentCount - Anzahl durchsuchter Dokumente
- * @returns {Promise<Buffer>} PNG als Buffer
+ * Generate a clearance certificate as PNG image
+ * Uses SVG → PNG conversion with sharp
+ * @param {string} name - Person's name
+ * @param {number} documentCount - Number of searched documents
+ * @returns {Promise<Buffer>} PNG as Buffer
  */
 export async function generateCertificateImage(name, documentCount = 2895) {
   const width = 1080;
   const height = 1080;
 
-  const date = new Date().toLocaleDateString('de-DE', {
+  const date = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
 
-  // Verifizierungscode
+  // Verification code
   const verificationCode = crypto
     .createHash('sha256')
     .update(`${name}-${date}-epstein-cert`)
@@ -26,7 +26,7 @@ export async function generateCertificateImage(name, documentCount = 2895) {
     .substring(0, 12)
     .toUpperCase();
 
-  // Escape HTML-Sonderzeichen im Namen
+  // Escape HTML special characters in name
   const escapedName = name
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -34,12 +34,12 @@ export async function generateCertificateImage(name, documentCount = 2895) {
     .replace(/"/g, '&quot;')
     .toUpperCase();
 
-  // Name kuerzen wenn zu lang
+  // Truncate name if too long
   const displayName = escapedName.length > 25
     ? escapedName.substring(0, 22) + '...'
     : escapedName;
 
-  // Schriftgroesse anpassen
+  // Adjust font size
   const nameFontSize = displayName.length > 18 ? 42 : 56;
 
   const svg = `
@@ -75,15 +75,15 @@ export async function generateCertificateImage(name, documentCount = 2895) {
       <!-- Header Text -->
       <text x="${width / 2}" y="210" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="18" font-weight="bold"
-            fill="#C9A227" letter-spacing="3">BUNDESREPUBLIK SATIRE</text>
+            fill="#C9A227" letter-spacing="3">REPUBLIC OF SATIRE</text>
 
       <!-- Main Title -->
       <text x="${width / 2}" y="290" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="48" font-weight="bold"
-            fill="#FFFFFF">UNBEDENKLICHKEITS-</text>
+            fill="#FFFFFF">CLEARANCE</text>
       <text x="${width / 2}" y="350" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="48" font-weight="bold"
-            fill="#FFFFFF">ZERTIFIKAT</text>
+            fill="#FFFFFF">CERTIFICATE</text>
 
       <!-- Gold Line -->
       <line x1="200" y1="390" x2="${width - 200}" y2="390"
@@ -97,7 +97,7 @@ export async function generateCertificateImage(name, documentCount = 2895) {
       <!-- Confirmation Text -->
       <text x="${width / 2}" y="500" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="20"
-            fill="#FFFFFF">Hiermit wird bestaetigt, dass der Name</text>
+            fill="#FFFFFF">This is to certify that the name</text>
 
       <!-- Name -->
       <text x="${width / 2}" y="580" text-anchor="middle"
@@ -107,10 +107,10 @@ export async function generateCertificateImage(name, documentCount = 2895) {
       <!-- More Text -->
       <text x="${width / 2}" y="650" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="20"
-            fill="#FFFFFF">in keinem der ${documentCount.toLocaleString('de-DE')} durchsuchten</text>
+            fill="#FFFFFF">was not found in any of the ${documentCount.toLocaleString('en-US')}</text>
       <text x="${width / 2}" y="680" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="20"
-            fill="#FFFFFF">Epstein-Dokumente gefunden wurde.</text>
+            fill="#FFFFFF">searched Epstein documents.</text>
 
       <!-- Checkmark Circle -->
       <circle cx="${width / 2}" cy="760" r="40" fill="#4CAF50"/>
@@ -120,12 +120,12 @@ export async function generateCertificateImage(name, documentCount = 2895) {
       <!-- Verified Text -->
       <text x="${width / 2}" y="840" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="24" font-weight="bold"
-            fill="#4CAF50">VERIFIZIERT CLEAN</text>
+            fill="#4CAF50">VERIFIED CLEAN</text>
 
       <!-- Date and Code -->
       <text x="${width / 2}" y="900" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="14"
-            fill="#888888">Ausgestellt: ${date}</text>
+            fill="#888888">Issued: ${date}</text>
       <text x="${width / 2}" y="925" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="14"
             fill="#888888">Code: ${verificationCode}</text>
@@ -133,14 +133,14 @@ export async function generateCertificateImage(name, documentCount = 2895) {
       <!-- Disclaimer -->
       <text x="${width / 2}" y="990" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="11"
-            fill="#555555">SATIRISCHE WEB-APP - KEINE RECHTLICHE BEDEUTUNG</text>
+            fill="#555555">SATIRICAL WEB APP - NO LEGAL SIGNIFICANCE</text>
       <text x="${width / 2}" y="1010" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="11"
-            fill="#555555">epstein-certificate.app</text>
+            fill="#555555">epstein-certificate.onrender.com</text>
     </svg>
   `;
 
-  // Konvertiere SVG zu PNG
+  // Convert SVG to PNG
   const pngBuffer = await sharp(Buffer.from(svg))
     .png()
     .toBuffer();

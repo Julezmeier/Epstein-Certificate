@@ -21,10 +21,10 @@ function App() {
       const response = await axios.post('/api/search', { name })
       setSearchResult(response.data)
     } catch (err) {
-      console.error('Suchfehler:', err)
+      console.error('Search error:', err)
       setError(
         err.response?.data?.details ||
-        'Die Suche konnte nicht durchgefuehrt werden. Bitte versuchen Sie es spaeter erneut.'
+        'Search could not be performed. Please try again later.'
       )
     } finally {
       setIsLoading(false)
@@ -41,12 +41,12 @@ function App() {
     <div className="app">
       <div className="container">
         <header className="header">
-          <div className="badge">SATIRISCHE WEB-APP</div>
+          <div className="badge">SATIRICAL WEB APP</div>
           <h1 className="title">Epstein Files</h1>
-          <h2 className="subtitle">Unbedenklichkeitszertifikat</h2>
+          <h2 className="subtitle">Clearance Certificate</h2>
           <p className="description">
-            Durchsuchen Sie {(2895).toLocaleString('de-DE')} Dokumente aus dem Epstein-Archiv
-            und erhalten Sie Ihr persoenliches Unbedenklichkeitszertifikat.
+            Search through {(2895).toLocaleString('en-US')} documents from the Epstein Archive
+            and receive your personal clearance certificate.
           </p>
         </header>
 
@@ -62,7 +62,7 @@ function App() {
               <span className="error-icon">!</span>
               <p>{error}</p>
               <button onClick={handleReset} className="btn btn-secondary">
-                Erneut versuchen
+                Try again
               </button>
             </div>
           )}
@@ -76,7 +76,7 @@ function App() {
               )}
 
               <button onClick={handleReset} className="btn btn-secondary reset-btn">
-                Neue Suche
+                New Search
               </button>
             </>
           )}
@@ -84,12 +84,12 @@ function App() {
 
         <footer className="footer">
           <p className="disclaimer">
-            <strong>Disclaimer:</strong> Dies ist eine satirische Web-Anwendung ohne jegliche
-            rechtliche Bedeutung. Die Suche erfolgt in oeffentlich zugaenglichen Dokumenten.
-            Kein Name wird gespeichert oder protokolliert.
+            <strong>Disclaimer:</strong> This is a satirical web application with no legal
+            significance. The search is performed on publicly available documents.
+            No names are stored or logged.
           </p>
           <p className="copyright">
-            2026 - Satirisches Projekt
+            2026 - Satirical Project
           </p>
         </footer>
       </div>

@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * POST /api/search
- * Durchsucht die Epstein-Dokumente nach einem Namen
+ * Search Epstein documents for a name
  */
 router.post('/', async (req, res) => {
   try {
@@ -13,8 +13,8 @@ router.post('/', async (req, res) => {
 
     if (!name || typeof name !== 'string') {
       return res.status(400).json({
-        error: 'Name ist erforderlich',
-        details: 'Bitte geben Sie einen Namen ein'
+        error: 'Name required',
+        details: 'Please enter a name'
       });
     }
 
@@ -22,19 +22,19 @@ router.post('/', async (req, res) => {
 
     if (trimmedName.length < 2) {
       return res.status(400).json({
-        error: 'Name zu kurz',
-        details: 'Der Name muss mindestens 2 Zeichen lang sein'
+        error: 'Name too short',
+        details: 'Name must be at least 2 characters long'
       });
     }
 
     if (trimmedName.length > 100) {
       return res.status(400).json({
-        error: 'Name zu lang',
-        details: 'Der Name darf maximal 100 Zeichen lang sein'
+        error: 'Name too long',
+        details: 'Name must be at most 100 characters long'
       });
     }
 
-    console.log(`Suche nach: "${trimmedName}"`);
+    console.log(`Searching for: "${trimmedName}"`);
 
     const result = await searchName(trimmedName);
 
@@ -45,17 +45,17 @@ router.post('/', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Suchfehler:', error);
+    console.error('Search error:', error);
     res.status(500).json({
-      error: 'Suchfehler',
-      details: 'Die Suche konnte nicht durchgefuehrt werden. Bitte versuchen Sie es spaeter erneut.'
+      error: 'Search error',
+      details: 'Search could not be performed. Please try again later.'
     });
   }
 });
 
 /**
  * GET /api/search/stats
- * Gibt Statistiken ueber die indexierten Dokumente zurueck
+ * Returns statistics about indexed documents
  */
 router.get('/stats', (req, res) => {
   res.json({

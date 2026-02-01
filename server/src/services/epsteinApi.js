@@ -1,13 +1,9 @@
 import axios from 'axios';
 
-// Die EpsteinFiles API auf GitHub Pages
-// Hinweis: Falls die externe API nicht verfügbar ist, nutzen wir Mock-Daten
-const EPSTEIN_API_BASE = 'https://epstein-docs.github.io';
-
-// Mock-Daten für Entwicklung und als Fallback
+// Mock data for development and as fallback
 const MOCK_DOCUMENTS_COUNT = 2895;
 
-// Einige bekannte Namen aus den Dokumenten für realistische Tests
+// Known names from documents for realistic tests
 const KNOWN_NAMES = [
   'bill clinton',
   'donald trump',
@@ -20,30 +16,26 @@ const KNOWN_NAMES = [
 ];
 
 /**
- * Durchsucht die Epstein-Dokumente nach einem Namen
- * @param {string} name - Der zu suchende Name
+ * Search Epstein documents for a name
+ * @param {string} name - Name to search for
  * @returns {Promise<{found: boolean, matches: Array, searchedDocuments: number, source: string}>}
  */
 export async function searchName(name) {
   const normalizedName = name.toLowerCase().trim();
 
-  // Prüfe ob es ein bekannter Name ist (für Demo-Zwecke)
+  // Check if it's a known name (for demo purposes)
   const isKnownName = KNOWN_NAMES.some(known =>
     normalizedName.includes(known) || known.includes(normalizedName)
   );
 
   try {
-    // Versuche die externe API zu nutzen
-    // Da die GitHub API möglicherweise nicht direkt durchsuchbar ist,
-    // simulieren wir hier die Suche mit bekannten Namen
-
     if (isKnownName) {
       return {
         found: true,
         matches: [
           {
             document: `document_${Math.floor(Math.random() * 1000)}.pdf`,
-            excerpt: `...${name} wurde in Verbindung mit...`,
+            excerpt: `...${name} was found in connection with...`,
             page: Math.floor(Math.random() * 50) + 1,
             score: 0.85 + Math.random() * 0.15
           }
@@ -53,7 +45,7 @@ export async function searchName(name) {
       };
     }
 
-    // Name nicht gefunden
+    // Name not found
     return {
       found: false,
       matches: [],
@@ -62,9 +54,9 @@ export async function searchName(name) {
     };
 
   } catch (error) {
-    console.error('API Fehler:', error.message);
+    console.error('API Error:', error.message);
 
-    // Fallback auf Mock-Daten bei API-Fehler
+    // Fallback to mock data on API error
     return {
       found: isKnownName,
       matches: isKnownName ? [{
@@ -79,7 +71,7 @@ export async function searchName(name) {
 }
 
 /**
- * Gibt die Anzahl der indexierten Dokumente zurück
+ * Returns the number of indexed documents
  */
 export function getDocumentCount() {
   return MOCK_DOCUMENTS_COUNT;

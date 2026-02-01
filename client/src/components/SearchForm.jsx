@@ -14,14 +14,14 @@ function SearchForm({ onSearch, disabled }) {
     <form className="search-form" onSubmit={handleSubmit}>
       <div className="input-group">
         <label htmlFor="name-input" className="input-label">
-          Geben Sie Ihren Namen ein:
+          Enter your name:
         </label>
         <input
           id="name-input"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Vor- und Nachname"
+          placeholder="First and last name"
           className="input-field"
           disabled={disabled}
           minLength={2}
@@ -36,12 +36,12 @@ function SearchForm({ onSearch, disabled }) {
         disabled={disabled || name.trim().length < 2}
       >
         <span className="btn-icon">&#128269;</span>
-        Dokumente durchsuchen
+        Search Documents
       </button>
 
       <p className="search-hint">
-        Die Suche durchlaeuft alle verfuegbaren Epstein-Dokumente nach exakten
-        und aehnlichen Namensübereinstimmungen.
+        The search checks all available Epstein documents for exact
+        and similar name matches.
       </p>
     </form>
   )

@@ -7,14 +7,14 @@ function LoadingSpinner({ name }) {
         <div className="spinner-ring"></div>
       </div>
       <p className="loading-text">
-        Durchsuche 2.895 Dokumente nach <strong>"{name}"</strong>...
+        Searching 2,895 documents for <strong>"{name}"</strong>...
       </p>
       <div className="loading-progress">
         <div className="progress-bar">
           <div className="progress-fill"></div>
         </div>
       </div>
-      <p className="loading-hint">Dies kann einige Sekunden dauern</p>
+      <p className="loading-hint">This may take a few seconds</p>
     </div>
   )
 }

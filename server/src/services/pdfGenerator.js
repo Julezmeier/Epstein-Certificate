@@ -2,10 +2,10 @@ import PDFDocument from 'pdfkit';
 import crypto from 'crypto';
 
 /**
- * Generiert ein Unbedenklichkeitszertifikat als PDF
- * @param {string} name - Name der Person
- * @param {number} documentCount - Anzahl durchsuchter Dokumente
- * @returns {Promise<Buffer>} PDF als Buffer
+ * Generate a clearance certificate as PDF
+ * @param {string} name - Person's name
+ * @param {number} documentCount - Number of searched documents
+ * @returns {Promise<Buffer>} PDF as Buffer
  */
 export async function generateCertificatePDF(name, documentCount = 2895) {
   return new Promise((resolve, reject) => {
@@ -23,13 +23,13 @@ export async function generateCertificatePDF(name, documentCount = 2895) {
 
       const width = doc.page.width;
       const height = doc.page.height;
-      const date = new Date().toLocaleDateString('de-DE', {
+      const date = new Date().toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
       });
 
-      // Verifizierungscode generieren
+      // Generate verification code
       const verificationCode = crypto
         .createHash('sha256')
         .update(`${name}-${date}-epstein-cert`)
@@ -37,23 +37,23 @@ export async function generateCertificatePDF(name, documentCount = 2895) {
         .substring(0, 16)
         .toUpperCase();
 
-      // Hintergrund (leichtes Beige)
+      // Background (light beige)
       doc.rect(0, 0, width, height).fill('#FDF8F0');
 
-      // Goldener Rahmen
+      // Gold border
       const borderMargin = 30;
       doc.lineWidth(3)
         .strokeColor('#C9A227')
         .rect(borderMargin, borderMargin, width - 2 * borderMargin, height - 2 * borderMargin)
         .stroke();
 
-      // Innerer Rahmen
+      // Inner border
       doc.lineWidth(1)
         .strokeColor('#C9A227')
         .rect(borderMargin + 10, borderMargin + 10, width - 2 * borderMargin - 20, height - 2 * borderMargin - 20)
         .stroke();
 
-      // Dekorative Ecken
+      // Decorative corners
       const cornerSize = 20;
       const corners = [
         [borderMargin + 5, borderMargin + 5],
@@ -75,51 +75,50 @@ export async function generateCertificatePDF(name, documentCount = 2895) {
       doc.fillColor('#1a1a2e')
         .fontSize(16)
         .font('Helvetica')
-        .text('BUNDESREPUBLIK SATIRE', 0, 70, { align: 'center' });
+        .text('REPUBLIC OF SATIRE', 0, 70, { align: 'center' });
 
-      // Haupttitel
+      // Main title
       doc.fillColor('#C9A227')
         .fontSize(42)
         .font('Helvetica-Bold')
-        .text('UNBEDENKLICHKEITSZERTIFIKAT', 0, 100, { align: 'center' });
+        .text('CLEARANCE CERTIFICATE', 0, 100, { align: 'center' });
 
-      // Untertitel
+      // Subtitle
       doc.fillColor('#1a1a2e')
         .fontSize(14)
         .font('Helvetica')
-        .text('Epstein Document Archive - Offizielles Suchergebnis', 0, 155, { align: 'center' });
+        .text('Epstein Document Archive - Official Search Result', 0, 155, { align: 'center' });
 
-      // Trennlinie
+      // Divider line
       doc.strokeColor('#C9A227')
         .lineWidth(1)
         .moveTo(150, 180)
         .lineTo(width - 150, 180)
         .stroke();
 
-      // Haupttext
+      // Main text
       doc.fillColor('#1a1a2e')
         .fontSize(14)
         .font('Helvetica')
-        .text('Hiermit wird offiziell bestaetigt, dass der Name', 0, 210, { align: 'center' });
+        .text('This is to officially certify that the name', 0, 210, { align: 'center' });
 
-      // Name (gross und prominent)
+      // Name (large and prominent)
       doc.fillColor('#1a1a2e')
         .fontSize(36)
         .font('Helvetica-Bold')
         .text(name.toUpperCase(), 0, 240, { align: 'center' });
 
-      // Weiterer Text
+      // Additional text
       doc.fillColor('#1a1a2e')
         .fontSize(14)
         .font('Helvetica')
-        .text(`in keinem der ${documentCount.toLocaleString('de-DE')} durchsuchten Epstein-Dokumente`, 0, 290, { align: 'center' })
-        .text('gefunden wurde.', 0, 310, { align: 'center' });
+        .text(`was not found in any of the ${documentCount.toLocaleString('en-US')} searched Epstein documents.`, 0, 290, { align: 'center' });
 
-      // Datum
+      // Date
       doc.fontSize(12)
-        .text(`Ausgestellt am: ${date}`, 0, 350, { align: 'center' });
+        .text(`Issued on: ${date}`, 0, 340, { align: 'center' });
 
-      // Siegel (Kreis mit Text)
+      // Seal (circle with text)
       const sealX = width - 150;
       const sealY = height - 150;
       const sealRadius = 50;
@@ -136,7 +135,7 @@ export async function generateCertificatePDF(name, documentCount = 2895) {
 
       doc.fillColor('#C9A227')
         .fontSize(8)
-        .text('VERIFIZIERT', sealX - 25, sealY - 20, { width: 50, align: 'center' })
+        .text('VERIFIED', sealX - 25, sealY - 20, { width: 50, align: 'center' })
         .fontSize(10)
         .font('Helvetica-Bold')
         .text('CLEAN', sealX - 25, sealY - 5, { width: 50, align: 'center' })
@@ -144,17 +143,17 @@ export async function generateCertificatePDF(name, documentCount = 2895) {
         .font('Helvetica')
         .text('2026', sealX - 25, sealY + 10, { width: 50, align: 'center' });
 
-      // Verifizierungscode
+      // Verification code
       doc.fillColor('#666')
         .fontSize(10)
         .font('Helvetica')
-        .text(`Verifizierungscode: ${verificationCode}`, 0, height - 100, { align: 'center' });
+        .text(`Verification Code: ${verificationCode}`, 0, height - 100, { align: 'center' });
 
       // Disclaimer
       doc.fillColor('#999')
         .fontSize(8)
-        .text('DISCLAIMER: Dies ist eine satirische Web-Anwendung ohne jegliche rechtliche Bedeutung.', 0, height - 80, { align: 'center' })
-        .text('Das Zertifikat dient ausschliesslich Unterhaltungszwecken und stellt keine offizielle Bestaetigung dar.', 0, height - 68, { align: 'center' });
+        .text('DISCLAIMER: This is a satirical web application with no legal significance.', 0, height - 80, { align: 'center' })
+        .text('This certificate is for entertainment purposes only and does not constitute official confirmation.', 0, height - 68, { align: 'center' });
 
       doc.end();
     } catch (error) {
