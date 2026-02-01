@@ -53,70 +53,104 @@ export async function generateCertificatePDF(name, documentCount = 2895) {
         .rect(borderMargin + 10, borderMargin + 10, width - 2 * borderMargin - 20, height - 2 * borderMargin - 20)
         .stroke();
 
-      // Decorative corners
-      const cornerSize = 20;
-      const corners = [
-        [borderMargin + 5, borderMargin + 5],
-        [width - borderMargin - 5 - cornerSize, borderMargin + 5],
-        [borderMargin + 5, height - borderMargin - 5 - cornerSize],
-        [width - borderMargin - 5 - cornerSize, height - borderMargin - 5 - cornerSize]
-      ];
+      // Decorative corners (L-shapes pointing inward)
+      const cornerSize = 25;
+      const cornerOffset = borderMargin + 8;
 
-      corners.forEach(([x, y]) => {
-        doc.lineWidth(2)
-          .strokeColor('#C9A227')
-          .moveTo(x, y + cornerSize)
-          .lineTo(x, y)
-          .lineTo(x + cornerSize, y)
-          .stroke();
-      });
+      // Top-left corner (pointing inward to bottom-right)
+      doc.lineWidth(2)
+        .strokeColor('#C9A227')
+        .moveTo(cornerOffset, cornerOffset + cornerSize)
+        .lineTo(cornerOffset, cornerOffset)
+        .lineTo(cornerOffset + cornerSize, cornerOffset)
+        .stroke();
+
+      // Top-right corner (pointing inward to bottom-left)
+      doc.moveTo(width - cornerOffset, cornerOffset + cornerSize)
+        .lineTo(width - cornerOffset, cornerOffset)
+        .lineTo(width - cornerOffset - cornerSize, cornerOffset)
+        .stroke();
+
+      // Bottom-left corner (pointing inward to top-right)
+      doc.moveTo(cornerOffset, height - cornerOffset - cornerSize)
+        .lineTo(cornerOffset, height - cornerOffset)
+        .lineTo(cornerOffset + cornerSize, height - cornerOffset)
+        .stroke();
+
+      // Bottom-right corner (pointing inward to top-left)
+      doc.moveTo(width - cornerOffset, height - cornerOffset - cornerSize)
+        .lineTo(width - cornerOffset, height - cornerOffset)
+        .lineTo(width - cornerOffset - cornerSize, height - cornerOffset)
+        .stroke();
+
+      // Calculate center Y position for content
+      const contentStartY = 60;
 
       // Header
       doc.fillColor('#1a1a2e')
-        .fontSize(16)
+        .fontSize(14)
         .font('Helvetica')
-        .text('REPUBLIC OF SATIRE', 0, 70, { align: 'center' });
+        .text('REPUBLIC OF SATIRE', 0, contentStartY, { align: 'center' });
 
       // Main title
       doc.fillColor('#C9A227')
-        .fontSize(42)
+        .fontSize(38)
         .font('Helvetica-Bold')
-        .text('CLEARANCE CERTIFICATE', 0, 100, { align: 'center' });
+        .text('CLEARANCE CERTIFICATE', 0, contentStartY + 25, { align: 'center' });
 
       // Subtitle
       doc.fillColor('#1a1a2e')
-        .fontSize(14)
+        .fontSize(12)
         .font('Helvetica')
-        .text('Epstein Document Archive - Official Search Result', 0, 155, { align: 'center' });
+        .text('Epstein Document Archive - Official Search Result', 0, contentStartY + 75, { align: 'center' });
 
       // Divider line
       doc.strokeColor('#C9A227')
         .lineWidth(1)
-        .moveTo(150, 180)
-        .lineTo(width - 150, 180)
+        .moveTo(180, contentStartY + 100)
+        .lineTo(width - 180, contentStartY + 100)
         .stroke();
 
       // Main text
       doc.fillColor('#1a1a2e')
         .fontSize(14)
         .font('Helvetica')
-        .text('This is to officially certify that the name', 0, 210, { align: 'center' });
+        .text('This is to officially certify that the name', 0, contentStartY + 130, { align: 'center' });
 
       // Name (large and prominent)
       doc.fillColor('#1a1a2e')
-        .fontSize(36)
+        .fontSize(32)
         .font('Helvetica-Bold')
-        .text(name.toUpperCase(), 0, 240, { align: 'center' });
+        .text(name.toUpperCase(), 0, contentStartY + 160, { align: 'center' });
 
       // Additional text
       doc.fillColor('#1a1a2e')
         .fontSize(14)
         .font('Helvetica')
-        .text(`was not found in any of the ${documentCount.toLocaleString('en-US')} searched Epstein documents.`, 0, 290, { align: 'center' });
+        .text(`was not found in any of the ${documentCount.toLocaleString('en-US')} searched Epstein documents.`, 0, contentStartY + 210, { align: 'center' });
 
       // Date
       doc.fontSize(12)
-        .text(`Issued on: ${date}`, 0, 340, { align: 'center' });
+        .text(`Issued on: ${date}`, 0, contentStartY + 250, { align: 'center' });
+
+      // Green checkmark circle in center
+      const checkX = width / 2;
+      const checkY = contentStartY + 320;
+      const checkRadius = 30;
+
+      // Green circle background
+      doc.circle(checkX, checkY, checkRadius)
+        .fill('#4CAF50');
+
+      // White checkmark
+      doc.strokeColor('#FFFFFF')
+        .lineWidth(4)
+        .lineCap('round')
+        .lineJoin('round')
+        .moveTo(checkX - 12, checkY)
+        .lineTo(checkX - 3, checkY + 10)
+        .lineTo(checkX + 15, checkY - 10)
+        .stroke();
 
       // Seal (circle with text)
       const sealX = width - 150;

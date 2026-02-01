@@ -1,9 +1,9 @@
-import sharp from 'sharp';
+import { createCanvas } from '@napi-rs/canvas';
 import crypto from 'crypto';
 
 /**
  * Generate a clearance certificate as PNG image
- * Uses SVG → PNG conversion with sharp
+ * Uses @napi-rs/canvas for reliable text rendering on Vercel
  * @param {string} name - Person's name
  * @param {number} documentCount - Number of searched documents
  * @returns {Promise<Buffer>} PNG as Buffer
@@ -11,6 +11,9 @@ import crypto from 'crypto';
 export async function generateCertificateImage(name, documentCount = 2895) {
   const width = 1080;
   const height = 1080;
+
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext('2d');
 
   const date = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
@@ -26,141 +29,179 @@ export async function generateCertificateImage(name, documentCount = 2895) {
     .substring(0, 12)
     .toUpperCase();
 
-  // Escape HTML special characters in name
-  const escapedName = name
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .toUpperCase();
+  // Prepare display name
+  let displayName = name.toUpperCase();
+  if (displayName.length > 25) {
+    displayName = displayName.substring(0, 22) + '...';
+  }
 
-  // Truncate name if too long
-  const displayName = escapedName.length > 25
-    ? escapedName.substring(0, 22) + '...'
-    : escapedName;
+  // Background gradient
+  const gradient = ctx.createLinearGradient(0, 0, 0, height);
+  gradient.addColorStop(0, '#1a1a2e');
+  gradient.addColorStop(1, '#16213e');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width, height);
 
-  // Adjust font size
+  // Outer border
+  ctx.strokeStyle = '#C9A227';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(40, 40, width - 80, height - 80);
+
+  // Inner border
+  ctx.lineWidth = 1;
+  ctx.strokeRect(55, 55, width - 110, height - 110);
+
+  // Corner decorations (L-shapes pointing inward)
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = '#C9A227';
+
+  // Top-left corner
+  ctx.beginPath();
+  ctx.moveTo(50, 80);
+  ctx.lineTo(50, 50);
+  ctx.lineTo(80, 50);
+  ctx.stroke();
+
+  // Top-right corner
+  ctx.beginPath();
+  ctx.moveTo(width - 50, 80);
+  ctx.lineTo(width - 50, 50);
+  ctx.lineTo(width - 80, 50);
+  ctx.stroke();
+
+  // Bottom-left corner
+  ctx.beginPath();
+  ctx.moveTo(50, height - 80);
+  ctx.lineTo(50, height - 50);
+  ctx.lineTo(80, height - 50);
+  ctx.stroke();
+
+  // Bottom-right corner
+  ctx.beginPath();
+  ctx.moveTo(width - 50, height - 80);
+  ctx.lineTo(width - 50, height - 50);
+  ctx.lineTo(width - 80, height - 50);
+  ctx.stroke();
+
+  // Star badge
+  drawStar(ctx, width / 2, 115, 40, 5, '#C9A227');
+
+  // Header text
+  ctx.fillStyle = '#C9A227';
+  ctx.font = 'bold 18px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('REPUBLIC OF SATIRE', width / 2, 210);
+
+  // Main title
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = 'bold 48px sans-serif';
+  ctx.fillText('CLEARANCE', width / 2, 290);
+  ctx.fillText('CERTIFICATE', width / 2, 350);
+
+  // Gold line
+  ctx.strokeStyle = '#C9A227';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(200, 390);
+  ctx.lineTo(width - 200, 390);
+  ctx.stroke();
+
+  // Subtitle
+  ctx.fillStyle = '#888888';
+  ctx.font = '16px sans-serif';
+  ctx.fillText('Epstein Document Archive', width / 2, 430);
+
+  // Confirmation text
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '20px sans-serif';
+  ctx.fillText('This is to certify that the name', width / 2, 500);
+
+  // Name
   const nameFontSize = displayName.length > 18 ? 42 : 56;
+  ctx.fillStyle = '#C9A227';
+  ctx.font = `bold ${nameFontSize}px sans-serif`;
+  ctx.fillText(displayName, width / 2, 580);
 
-  const svg = `
-    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#1a1a2e"/>
-          <stop offset="100%" style="stop-color:#16213e"/>
-        </linearGradient>
-      </defs>
+  // More text
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '20px sans-serif';
+  ctx.fillText(`was not found in any of the ${documentCount.toLocaleString('en-US')}`, width / 2, 650);
+  ctx.fillText('searched Epstein documents.', width / 2, 680);
 
-      <!-- Background -->
-      <rect width="${width}" height="${height}" fill="url(#bgGradient)"/>
+  // Checkmark circle
+  ctx.fillStyle = '#4CAF50';
+  ctx.beginPath();
+  ctx.arc(width / 2, 760, 40, 0, Math.PI * 2);
+  ctx.fill();
 
-      <!-- Outer Border -->
-      <rect x="40" y="40" width="${width - 80}" height="${height - 80}"
-            fill="none" stroke="#C9A227" stroke-width="4"/>
+  // Checkmark
+  ctx.strokeStyle = '#FFFFFF';
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(width / 2 - 18, 760);
+  ctx.lineTo(width / 2 - 5, 775);
+  ctx.lineTo(width / 2 + 20, 745);
+  ctx.stroke();
 
-      <!-- Inner Border -->
-      <rect x="55" y="55" width="${width - 110}" height="${height - 110}"
-            fill="none" stroke="#C9A227" stroke-width="1"/>
+  // Verified text
+  ctx.fillStyle = '#4CAF50';
+  ctx.font = 'bold 24px sans-serif';
+  ctx.fillText('VERIFIED CLEAN', width / 2, 840);
 
-      <!-- Corner Decorations -->
-      <path d="M50 80 L50 50 L80 50" fill="none" stroke="#C9A227" stroke-width="3"/>
-      <path d="M${width - 50} 80 L${width - 50} 50 L${width - 80} 50" fill="none" stroke="#C9A227" stroke-width="3"/>
-      <path d="M50 ${height - 80} L50 ${height - 50} L80 ${height - 50}" fill="none" stroke="#C9A227" stroke-width="3"/>
-      <path d="M${width - 50} ${height - 80} L${width - 50} ${height - 50} L${width - 80} ${height - 50}" fill="none" stroke="#C9A227" stroke-width="3"/>
+  // Date and code
+  ctx.fillStyle = '#888888';
+  ctx.font = '14px sans-serif';
+  ctx.fillText(`Issued: ${date}`, width / 2, 900);
+  ctx.fillText(`Code: ${verificationCode}`, width / 2, 925);
 
-      <!-- Star Badge -->
-      <polygon points="540,85 552,115 578,115 558,135 566,160 540,145 514,160 522,135 502,115 528,115"
-               fill="#C9A227"/>
+  // Disclaimer
+  ctx.fillStyle = '#555555';
+  ctx.font = '11px sans-serif';
+  ctx.fillText('SATIRICAL WEB APP - NO LEGAL SIGNIFICANCE', width / 2, 990);
+  ctx.fillText('epstein-certificate.com', width / 2, 1010);
 
-      <!-- Header Text -->
-      <text x="${width / 2}" y="210" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="18" font-weight="bold"
-            fill="#C9A227" letter-spacing="3">REPUBLIC OF SATIRE</text>
+  // Diagonal watermark
+  ctx.save();
+  ctx.translate(width / 2, height / 2);
+  ctx.rotate(-30 * Math.PI / 180);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.font = 'bold 60px sans-serif';
+  ctx.fillText('epstein-certificate.com', 0, 0);
+  ctx.restore();
 
-      <!-- Main Title -->
-      <text x="${width / 2}" y="290" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="48" font-weight="bold"
-            fill="#FFFFFF">CLEARANCE</text>
-      <text x="${width / 2}" y="350" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="48" font-weight="bold"
-            fill="#FFFFFF">CERTIFICATE</text>
+  // Small watermark bottom right
+  ctx.fillStyle = 'rgba(201, 162, 39, 0.6)';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('epstein-certificate.com', width - 60, height - 55);
 
-      <!-- Gold Line -->
-      <line x1="200" y1="390" x2="${width - 200}" y2="390"
-            stroke="#C9A227" stroke-width="2"/>
+  return canvas.toBuffer('image/png');
+}
 
-      <!-- Subtitle -->
-      <text x="${width / 2}" y="430" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="16"
-            fill="#888888">Epstein Document Archive</text>
+/**
+ * Draw a 5-pointed star
+ */
+function drawStar(ctx, cx, cy, outerRadius, points, color) {
+  const innerRadius = outerRadius * 0.4;
+  const step = Math.PI / points;
 
-      <!-- Confirmation Text -->
-      <text x="${width / 2}" y="500" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="20"
-            fill="#FFFFFF">This is to certify that the name</text>
+  ctx.beginPath();
+  ctx.fillStyle = color;
 
-      <!-- Name -->
-      <text x="${width / 2}" y="580" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="${nameFontSize}" font-weight="bold"
-            fill="#C9A227">${displayName}</text>
+  for (let i = 0; i < 2 * points; i++) {
+    const radius = i % 2 === 0 ? outerRadius : innerRadius;
+    const angle = i * step - Math.PI / 2;
+    const x = cx + Math.cos(angle) * radius;
+    const y = cy + Math.sin(angle) * radius;
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+  }
 
-      <!-- More Text -->
-      <text x="${width / 2}" y="650" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="20"
-            fill="#FFFFFF">was not found in any of the ${documentCount.toLocaleString('en-US')}</text>
-      <text x="${width / 2}" y="680" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="20"
-            fill="#FFFFFF">searched Epstein documents.</text>
-
-      <!-- Checkmark Circle -->
-      <circle cx="${width / 2}" cy="760" r="40" fill="#4CAF50"/>
-      <polyline points="522,760 535,775 560,745"
-            fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-
-      <!-- Verified Text -->
-      <text x="${width / 2}" y="840" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="24" font-weight="bold"
-            fill="#4CAF50">VERIFIED CLEAN</text>
-
-      <!-- Date and Code -->
-      <text x="${width / 2}" y="900" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="14"
-            fill="#888888">Issued: ${date}</text>
-      <text x="${width / 2}" y="925" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="14"
-            fill="#888888">Code: ${verificationCode}</text>
-
-      <!-- Disclaimer -->
-      <text x="${width / 2}" y="990" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="11"
-            fill="#555555">SATIRICAL WEB APP - NO LEGAL SIGNIFICANCE</text>
-      <text x="${width / 2}" y="1010" text-anchor="middle"
-            font-family="Arial, sans-serif" font-size="11"
-            fill="#555555">epstein-certificate.com</text>
-
-      <!-- Watermark - diagonal across image -->
-      <text x="${width / 2}" y="${height / 2}"
-            text-anchor="middle"
-            font-family="Arial, sans-serif"
-            font-size="60"
-            font-weight="bold"
-            fill="rgba(255,255,255,0.08)"
-            transform="rotate(-30, ${width / 2}, ${height / 2})">epstein-certificate.com</text>
-
-      <!-- Small watermark bottom right -->
-      <text x="${width - 60}" y="${height - 55}"
-            text-anchor="end"
-            font-family="Arial, sans-serif"
-            font-size="14"
-            font-weight="bold"
-            fill="rgba(201, 162, 39, 0.6)">epstein-certificate.com</text>
-    </svg>
-  `;
-
-  // Convert SVG to PNG
-  const pngBuffer = await sharp(Buffer.from(svg))
-    .png()
-    .toBuffer();
-
-  return pngBuffer;
+  ctx.closePath();
+  ctx.fill();
 }
