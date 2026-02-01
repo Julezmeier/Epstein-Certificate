@@ -25,7 +25,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Serve static files from client build
-const clientDistPath = path.join(__dirname, '../../client/dist');
+const clientDistPath = path.join(__dirname, '../../dist');
 app.use(express.static(clientDistPath));
 
 // Catch-all route for SPA
