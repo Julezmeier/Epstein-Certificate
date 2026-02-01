@@ -21,7 +21,8 @@
     "cors": "^2.8.5",
     "axios": "^1.6.0",
     "pdfkit": "^0.14.0",
-    "@napi-rs/canvas": "^0.1.44"
+    "satori": "^0.10.11",
+    "@resvg/resvg-js": "^2.6.0"
   },
   "devDependencies": {
     "concurrently": "^8.2.0"
