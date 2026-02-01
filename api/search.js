@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 const MOCK_DOCUMENTS_COUNT = 2895;
 
 const KNOWN_NAMES = [
