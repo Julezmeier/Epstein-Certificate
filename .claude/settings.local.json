@@ -5,7 +5,12 @@
       "Bash(npm run dev:*)",
       "Bash(curl:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit: Epstein Certificate Web App\n\nSatirische Web-App die Namen in Epstein-Dokumenten sucht\nund Unbedenklichkeitszertifikate als PDF/PNG generiert.\n\nFeatures:\n- React Frontend mit Vite\n- Express Backend API\n- PDF-Zertifikat \\(PDFKit\\)\n- Social-Media-Bild \\(Sharp/SVG\\)\n- Simulierte Dokumentensuche\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git branch:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd Vercel serverless functions for deployment\n\n- Add vercel.json configuration\n- Add /api/search.js serverless function\n- Add /api/certificate/pdf.js serverless function  \n- Add /api/certificate/image.js serverless function\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
