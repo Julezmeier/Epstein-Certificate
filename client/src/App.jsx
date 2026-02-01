@@ -83,6 +83,18 @@ function App() {
         </main>
 
         <footer className="footer">
+          <div className="support-section">
+            <p className="support-text">Enjoy this app? Support the creator!</p>
+            <a
+              href="https://buymeacoffee.com/julezmeier"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bmc-button"
+            >
+              <span className="bmc-icon">☕</span>
+              Buy me a coffee
+            </a>
+          </div>
           <p className="disclaimer">
             <strong>Disclaimer:</strong> This is a satirical web application with no legal
             significance. The search is performed on publicly available documents.

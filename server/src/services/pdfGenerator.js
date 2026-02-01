@@ -155,6 +155,23 @@ export async function generateCertificatePDF(name, documentCount = 2895) {
         .text('DISCLAIMER: This is a satirical web application with no legal significance.', 0, height - 80, { align: 'center' })
         .text('This certificate is for entertainment purposes only and does not constitute official confirmation.', 0, height - 68, { align: 'center' });
 
+      // Watermark - diagonal across document
+      doc.save();
+      doc.rotate(-30, { origin: [width / 2, height / 2] });
+      doc.fillColor('#000')
+        .opacity(0.04)
+        .fontSize(50)
+        .font('Helvetica-Bold')
+        .text('epstein-certificate.com', width / 2 - 200, height / 2 - 20);
+      doc.restore();
+
+      // Small watermark bottom right
+      doc.fillColor('#C9A227')
+        .opacity(0.5)
+        .fontSize(10)
+        .font('Helvetica-Bold')
+        .text('epstein-certificate.com', width - 180, height - 55);
+
       doc.end();
     } catch (error) {
       reject(error);

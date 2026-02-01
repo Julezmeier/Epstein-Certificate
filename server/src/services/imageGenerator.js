@@ -136,7 +136,24 @@ export async function generateCertificateImage(name, documentCount = 2895) {
             fill="#555555">SATIRICAL WEB APP - NO LEGAL SIGNIFICANCE</text>
       <text x="${width / 2}" y="1010" text-anchor="middle"
             font-family="Arial, sans-serif" font-size="11"
-            fill="#555555">epstein-certificate.onrender.com</text>
+            fill="#555555">epstein-certificate.com</text>
+
+      <!-- Watermark - diagonal across image -->
+      <text x="${width / 2}" y="${height / 2}"
+            text-anchor="middle"
+            font-family="Arial, sans-serif"
+            font-size="60"
+            font-weight="bold"
+            fill="rgba(255,255,255,0.08)"
+            transform="rotate(-30, ${width / 2}, ${height / 2})">epstein-certificate.com</text>
+
+      <!-- Small watermark bottom right -->
+      <text x="${width - 60}" y="${height - 55}"
+            text-anchor="end"
+            font-family="Arial, sans-serif"
+            font-size="14"
+            font-weight="bold"
+            fill="rgba(201, 162, 39, 0.6)">epstein-certificate.com</text>
     </svg>
   `;
 
