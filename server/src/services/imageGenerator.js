@@ -296,7 +296,7 @@ export async function generateCertificateImage(name, documentCount = 2895) {
                 color: '#555555',
                 marginTop: 3,
               },
-              children: 'epstein-certificate.com',
+              children: 'epstein-certificate.xyz',
             },
           },
           // Watermark
@@ -311,7 +311,7 @@ export async function generateCertificateImage(name, documentCount = 2895) {
                 fontWeight: 700,
                 color: 'rgba(201, 162, 39, 0.6)',
               },
-              children: 'epstein-certificate.com',
+              children: 'epstein-certificate.xyz',
             },
           },
         ],

@@ -196,7 +196,7 @@ export async function generateCertificatePDF(name, documentCount = 2895) {
         .opacity(0.04)
         .fontSize(50)
         .font('Helvetica-Bold')
-        .text('epstein-certificate.com', width / 2 - 200, height / 2 - 20);
+        .text('epstein-certificate.xyz', width / 2 - 200, height / 2 - 20);
       doc.restore();
 
       // Small watermark bottom right
@@ -204,7 +204,7 @@ export async function generateCertificatePDF(name, documentCount = 2895) {
         .opacity(0.5)
         .fontSize(10)
         .font('Helvetica-Bold')
-        .text('epstein-certificate.com', width - 180, height - 55);
+        .text('epstein-certificate.xyz', width - 180, height - 55);
 
       doc.end();
     } catch (error) {
