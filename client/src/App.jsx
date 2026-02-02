@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import SearchForm from './components/SearchForm'
 import ResultDisplay from './components/ResultDisplay'
 import Certificate from './components/Certificate'
@@ -105,6 +106,7 @@ function App() {
           </p>
         </footer>
       </div>
+      <Analytics />
     </div>
   )
 }
