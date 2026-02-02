@@ -12,7 +12,8 @@
       "Bash(git push:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd Vercel serverless functions for deployment\n\n- Add vercel.json configuration\n- Add /api/search.js serverless function\n- Add /api/certificate/pdf.js serverless function  \n- Add /api/certificate/image.js serverless function\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nFix Vercel output directory configuration\n\n- Change Vite build output to root /dist\n- Update vercel.json outputDirectory\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "WebFetch(domain:www.aljazeera.com)"
     ]
   }
 }

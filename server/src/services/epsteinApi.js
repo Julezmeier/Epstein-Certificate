@@ -4,20 +4,49 @@ import axios from 'axios';
 const MOCK_DOCUMENTS_COUNT = 2895;
 
 // Known names from documents for realistic tests
+// Based on unsealed court documents from January 2024
 // Format: array of possible name variations for each person
 const KNOWN_NAMES = [
-  ['bill clinton', 'clinton', 'william clinton'],
+  // Politicians
+  ['bill clinton', 'clinton', 'william clinton', 'bill j clinton'],
   ['donald trump', 'trump', 'donald j trump', 'donald j. trump'],
+  ['al gore', 'gore', 'albert gore'],
+  ['bill richardson', 'richardson'],
+  ['ehud barak', 'barak'],
+  ['george mitchell', 'mitchell'],
+
+  // Royalty
   ['prince andrew', 'andrew windsor', 'duke of york'],
+
+  // Lawyers/Legal
   ['alan dershowitz', 'dershowitz'],
+  ['ken starr', 'starr', 'kenneth starr'],
+
+  // Business
   ['leslie wexner', 'wexner', 'les wexner'],
-  ['ghislaine maxwell', 'maxwell', 'ghislaine'],
-  ['virginia giuffre', 'giuffre', 'virginia roberts'],
-  ['jean luc brunel', 'brunel', 'jean-luc brunel'],
-  ['jeffrey epstein', 'epstein'],
+  ['tom pritzker', 'pritzker'],
+  ['glenn dubin', 'dubin'],
+  ['mort zuckerman', 'zuckerman'],
+  ['leon black', 'black'],
+
+  // Entertainment
   ['kevin spacey', 'spacey'],
   ['chris tucker', 'tucker'],
-  ['naomi campbell', 'campbell']
+  ['naomi campbell', 'campbell'],
+  ['david copperfield', 'copperfield'],
+  ['michael jackson', 'jackson'],
+
+  // Scientists
+  ['stephen hawking', 'hawking'],
+  ['marvin minsky', 'minsky'],
+
+  // Key figures
+  ['ghislaine maxwell', 'maxwell', 'ghislaine'],
+  ['jeffrey epstein', 'epstein'],
+  ['jean luc brunel', 'brunel', 'jean-luc brunel'],
+  ['virginia giuffre', 'giuffre', 'virginia roberts'],
+  ['sarah kellen', 'kellen'],
+  ['nadia marcinkova', 'marcinkova']
 ];
 
 /**
