@@ -4,15 +4,20 @@ import axios from 'axios';
 const MOCK_DOCUMENTS_COUNT = 2895;
 
 // Known names from documents for realistic tests
+// Format: array of possible name variations for each person
 const KNOWN_NAMES = [
-  'bill clinton',
-  'donald trump',
-  'prince andrew',
-  'alan dershowitz',
-  'leslie wexner',
-  'ghislaine maxwell',
-  'virginia giuffre',
-  'jean luc brunel'
+  ['bill clinton', 'clinton', 'william clinton'],
+  ['donald trump', 'trump', 'donald j trump', 'donald j. trump'],
+  ['prince andrew', 'andrew windsor', 'duke of york'],
+  ['alan dershowitz', 'dershowitz'],
+  ['leslie wexner', 'wexner', 'les wexner'],
+  ['ghislaine maxwell', 'maxwell', 'ghislaine'],
+  ['virginia giuffre', 'giuffre', 'virginia roberts'],
+  ['jean luc brunel', 'brunel', 'jean-luc brunel'],
+  ['jeffrey epstein', 'epstein'],
+  ['kevin spacey', 'spacey'],
+  ['chris tucker', 'tucker'],
+  ['naomi campbell', 'campbell']
 ];
 
 /**
@@ -24,8 +29,14 @@ export async function searchName(name) {
   const normalizedName = name.toLowerCase().trim();
 
   // Check if it's a known name (for demo purposes)
-  const isKnownName = KNOWN_NAMES.some(known =>
-    normalizedName.includes(known) || known.includes(normalizedName)
+  // Remove dots and extra spaces for better matching
+  const cleanedName = normalizedName.replace(/\./g, '').replace(/\s+/g, ' ');
+
+  const isKnownName = KNOWN_NAMES.some(nameVariations =>
+    nameVariations.some(variant => {
+      const cleanedVariant = variant.replace(/\./g, '').replace(/\s+/g, ' ');
+      return cleanedName.includes(cleanedVariant) || cleanedVariant.includes(cleanedName);
+    })
   );
 
   try {
